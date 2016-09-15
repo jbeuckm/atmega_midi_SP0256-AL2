@@ -2,18 +2,22 @@
 #include "Arduino.h"
 
 
-SP0256::SP0256(int aldPin, int lrqPin) {
+SP0256::SP0256(int aldPin, int lrqPin, int sePin) {
     
     PIN_ALD = aldPin;
     PIN_LRQ = lrqPin;
+    PIN_SE = sePin;
     
   // Set pin modes
   pinMode( PIN_ALD, OUTPUT );
+  pinMode( PIN_SE, OUTPUT );
+    
   pinMode( PIN_LRQ, INPUT );
     
   DDRC = B00111111;  // Sets Analog pins 0-5 to output
 
   digitalWrite(PIN_ALD, HIGH);
+  digitalWrite(PIN_SE, HIGH);
 
   speak( purple, (byte)(sizeof(purple) / sizeof(byte)) );
   speak( monkey, (byte)(sizeof(monkey) / sizeof(byte)) );
@@ -30,8 +34,7 @@ void SP0256::speak( byte* allophones, byte count ) {
 }
 
 void SP0256::speak( byte allophone ) {
-   while ( digitalRead(PIN_LRQ) == HIGH )
-    ; // Wait for LRQ to go low
+   while ( digitalRead(PIN_LRQ) == HIGH ); // Wait for LRQ to go low
 
   PORTC = allophone; // select the allophone
 
@@ -40,4 +43,8 @@ void SP0256::speak( byte allophone ) {
   digitalWrite(PIN_ALD, HIGH);
 }
 
+
+void SP0256::reset() {
+    
+}
 

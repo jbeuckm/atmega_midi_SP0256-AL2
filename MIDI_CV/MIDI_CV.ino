@@ -1,34 +1,36 @@
 #include <MIDI.h>
 #include "SP0256/SP0256.h"
+#include <EEPROM.h>
 
-#define LED 13   		    // LED pin on Arduino Uno
-
+#define LED_PIN 6
 #define GATE_PIN 4
-#define VELOCITY_PIN 6
-#define PWM_OUT_PIN 5
 
 #define ALL_NOTES_OFF 123
 
+#define MIDI_CHANNEL_ADDRESS 0
+byte selectedChannel;
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-byte selectedChannel = 17;
+SP0256 speech = new SP0256(12, 11, 13);
+
+
+boolean notePlaying = false;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
-  liveNoteCount++;
-  
-  baseNoteFrequency = (pitch - 12) * 42;
-  AnalogOutput1.setValue(baseNoteFrequency + pitchbendOffset);
-  AnalogOutput2.setValue(velocity * 32);
+  if (notePlaying) return;
+  notePlaying = true;
 
   digitalWrite(GATE_PIN, HIGH);
-  digitalWrite(LED, HIGH);
-  analogWrite(VELOCITY_PIN, 2 * velocity);
- }
+  digitalWrite(LED_PIN, HIGH);
+}
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
+  notePlaying = false;
+  digitalWrite(GATE_PIN, LOW);
+  digitalWrite(LED_PIN, LOW);
 }
 
 
@@ -37,9 +39,9 @@ void handleControlChange(byte channel, byte number, byte value)
   switch (number) {
         
     case ALL_NOTES_OFF:
+      speech.reset();
       break;
   }
-
 }
 
 
@@ -50,26 +52,53 @@ void handlePitchBend(byte channel, int bend)
   AnalogOutput1.setValue(baseNoteFrequency + pitchbendOffset);
 }
 
+void setMidiChannel(int channel) {
+    selectedChannel = message[4] % 17;
+    EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
+    midiIn.begin(selectedChannel);    
+}
+
+void handleSystemExclusive(byte message[], unsigned size) {
+  
+  if (message[1] != 0x77) return;      // manufacturer ID
+  if (message[2] != 0x34) return;      // model ID
+  if (message[3] != 1) return;  // device ID as set with trim pot
+
+  switch (message[4]) {
+    
+    case 0:
+      setMidiChannel(message[5]);
+      break;
+    
+    case 1:
+      sendPatchDump();
+      break;
+
+    case 2:
+      receivePatchDump(message);
+      break;
+      
+    default:
+      break;
+  }
+
+}
 
 // -----------------------------------------------------------------------------
 
 void setup()
 {
-    selectedChannel = 1;
+  selectedChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
+  if (selectedChannel > 16) {
+    selectedChannel = 0;
+    EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
+  }
 
     pinMode(LED, OUTPUT);
     digitalWrite(LED, LOW);
 
     pinMode(GATE_PIN, OUTPUT);
     digitalWrite(GATE_PIN, LOW);
-
-    delay(500);
-
-    // calibrate 8V
-    baseNoteFrequency = (108 - 12) * 42;
-    AnalogOutput1.setValue(baseNoteFrequency);
-    // calibrate full velocity
-    AnalogOutput2.setValue(32 * 127);
 
     MIDI.setHandleNoteOn(handleNoteOn);
     MIDI.setHandleNoteOff(handleNoteOff);
