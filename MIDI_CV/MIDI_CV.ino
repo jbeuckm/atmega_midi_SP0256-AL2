@@ -1,5 +1,5 @@
 #include <MIDI.h>
-#include "AH_MCP4922.h"
+#include "SP0256/SP0256.h"
 
 #define LED 13   		    // LED pin on Arduino Uno
 
@@ -9,12 +9,6 @@
 
 #define ALL_NOTES_OFF 123
 
-AH_MCP4922 AnalogOutput1(10,11,12,LOW,LOW);
-AH_MCP4922 AnalogOutput2(10,11,12,HIGH,LOW);
-
-int liveNoteCount = 0;
-int pitchbendOffset = 0;
-int baseNoteFrequency;
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
@@ -35,13 +29,6 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
-  liveNoteCount--;
-  
-  if (liveNoteCount <= 0) {
-    digitalWrite(GATE_PIN, LOW);
-    digitalWrite(LED, LOW);
-    analogWrite(VELOCITY_PIN, 0);
-  }
 }
 
 
@@ -50,11 +37,6 @@ void handleControlChange(byte channel, byte number, byte value)
   switch (number) {
         
     case ALL_NOTES_OFF:
-      liveNoteCount = 0;
-      handlePitchBend(selectedChannel, 0);
-      digitalWrite(GATE_PIN, LOW);
-      digitalWrite(LED, LOW);
-      analogWrite(VELOCITY_PIN, 0);
       break;
   }
 
@@ -73,9 +55,7 @@ void handlePitchBend(byte channel, int bend)
 
 void setup()
 {
-    int channelSpan = 1024 / 16;
-    int channelInput = analogRead(0);
-    selectedChannel = channelInput / channelSpan;
+    selectedChannel = 1;
 
     pinMode(LED, OUTPUT);
     digitalWrite(LED, LOW);
@@ -84,8 +64,6 @@ void setup()
     digitalWrite(GATE_PIN, LOW);
 
     delay(500);
-
-    playScale(selectedChannel);
 
     // calibrate 8V
     baseNoteFrequency = (108 - 12) * 42;
@@ -97,24 +75,9 @@ void setup()
     MIDI.setHandleNoteOff(handleNoteOff);
     MIDI.setHandlePitchBend(handlePitchBend);
     MIDI.setHandleControlChange(handleControlChange);
+    MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
     MIDI.begin(selectedChannel);
-}
-
-
-void playScale(int channel) {
-
-  int note = 60;
-
-  for (int i=0; i<channel; i++) {
-
-      handleNoteOn(channel, note, 100);
-      delay(50);
-      handleNoteOff(channel, note, 100);
-      delay(50);
-      note++;
-  }
-
 }
 
 
