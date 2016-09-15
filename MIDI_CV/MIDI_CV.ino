@@ -12,7 +12,7 @@ byte selectedChannel;
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-SP0256 speech = new SP0256(12, 11, 13);
+SP0256 speech = SP0256(12, 11, 13);
 
 
 boolean notePlaying = false;
@@ -47,15 +47,11 @@ void handleControlChange(byte channel, byte number, byte value)
 
 void handlePitchBend(byte channel, int bend)
 {
-  pitchbendOffset = bend >> 4;
-
-  AnalogOutput1.setValue(baseNoteFrequency + pitchbendOffset);
 }
 
 void setMidiChannel(int channel) {
-    selectedChannel = message[4] % 17;
-    EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
-    midiIn.begin(selectedChannel);    
+    EEPROM.write(MIDI_CHANNEL_ADDRESS, channel);
+    MIDI.begin(channel);
 }
 
 void handleSystemExclusive(byte message[], unsigned size) {
@@ -71,11 +67,9 @@ void handleSystemExclusive(byte message[], unsigned size) {
       break;
     
     case 1:
-      sendPatchDump();
       break;
 
     case 2:
-      receivePatchDump(message);
       break;
       
     default:
@@ -94,8 +88,8 @@ void setup()
     EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
   }
 
-    pinMode(LED, OUTPUT);
-    digitalWrite(LED, LOW);
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, LOW);
 
     pinMode(GATE_PIN, OUTPUT);
     digitalWrite(GATE_PIN, LOW);

@@ -1,6 +1,12 @@
 #include "SP0256.h"
 #include "Arduino.h"
 
+// some words to say
+byte purple[] = {PP, ER1, PP, LL };
+byte monkey[] = {MM, AX, NN1, KK1, IY };
+byte garden[] = {GG1, AR, PA3, DD2, IH, NN1 };
+byte moment[] = {MM, OW, MM, EH, NN1, TT2 };
+
 
 SP0256::SP0256(int aldPin, int lrqPin, int sePin) {
     
