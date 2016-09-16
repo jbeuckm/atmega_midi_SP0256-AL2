@@ -1,12 +1,12 @@
-#include "SP0256.h"
 #include "Arduino.h"
+#include "SP0256.h"
 
-// some words to say
+/* some words to say
 byte purple[] = {PP, ER1, PP, LL };
 byte monkey[] = {MM, AX, NN1, KK1, IY };
 byte garden[] = {GG1, AR, PA3, DD2, IH, NN1 };
 byte moment[] = {MM, OW, MM, EH, NN1, TT2 };
-
+*/
 
 SP0256::SP0256(int aldPin, int lrqPin, int sePin) {
     
@@ -24,11 +24,12 @@ SP0256::SP0256(int aldPin, int lrqPin, int sePin) {
 
   digitalWrite(PIN_ALD, HIGH);
   digitalWrite(PIN_SE, HIGH);
-
+/*
   speak( purple, (byte)(sizeof(purple) / sizeof(byte)) );
   speak( monkey, (byte)(sizeof(monkey) / sizeof(byte)) );
   speak( garden, (byte)(sizeof(garden) / sizeof(byte)) );
   speak( moment, (byte)(sizeof(moment) / sizeof(byte)) );
+  */
 }
 
 

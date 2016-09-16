@@ -22,7 +22,7 @@
 #define PA3 0x02
 #define PA4 0x03
 #define PA5 0x04
- 
+/* 
 #define OY  0x05
 #define AY  0x06
 #define EH  0x07
@@ -82,7 +82,7 @@
 #define GG2 0x3D
 #define EL  0x3E
 #define BB2 0x3F
-
+*/
 #include "Arduino.h"
 
 class SP0256
@@ -93,7 +93,7 @@ class SP0256
     
     void speak(byte *allophones, byte count);
     void speak( byte allophone );
-    void reset();
+    void reset(void);
 
   private:
     int PIN_ALD, PIN_LRQ, PIN_SE;
