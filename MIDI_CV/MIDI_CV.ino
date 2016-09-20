@@ -10,19 +10,21 @@
 #define MIDI_CHANNEL_ADDRESS 0
 byte selectedChannel;
 
-SP0256 speechSynth(12, 11, 13);
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
+SP0256 speechSynth(12, 11, 13, 9);
+/*
 class AllophoneList {
   public:
-    byte *list;
-    unsigned size;
+    byte list[];
+    byte count;
 };
+
 
 // a word for each midi note
 AllophoneList noteLists[128];
-
+*/
 
 boolean notePlaying = false;
 
@@ -31,7 +33,9 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
   if (notePlaying) return;
   notePlaying = true;
 
-  speechSynth.speak(noteLists[pitch].list, noteLists[pitch].size);
+//  speechSynth.speak(noteLists[pitch].list, noteLists[pitch].count);
+//byte purple[] = {0x09, 0x33, 0x09, 0x2d };
+//  speechSynth.speakList(purple, 0x04);
 
   digitalWrite(GATE_PIN, HIGH);
   digitalWrite(LED_PIN, HIGH);
@@ -79,17 +83,17 @@ void handleSystemExclusive(byte message[], unsigned size) {
 
     // speak a word
     case 1:
-      speechSynth.speak(&message[5], size-6);
+      speechSynth.speakList(&message[5], size-6);
       break;
 
     // assign a word to a midi note number
     case 2:
       byte i;
       i = message[5];
-      noteLists[i].list = &message[6];
-      noteLists[i].size = size-7;
+//      noteLists[i].list = &message[6];
+//      noteLists[i].count = size-7;
       break;
-      
+     
     // save current configuration to default
     case 3:
       break;
@@ -114,15 +118,18 @@ void setup()
 {
   selectedChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
   if (selectedChannel > 16) {
-    selectedChannel = 0;
+    selectedChannel = 1;
     EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
   }
+    selectedChannel = 1;
 
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, LOW);
 
     pinMode(GATE_PIN, OUTPUT);
     digitalWrite(GATE_PIN, LOW);
+
+    speechSynth.reset();
 
     MIDI.setHandleNoteOn(handleNoteOn);
     MIDI.setHandleNoteOff(handleNoteOff);

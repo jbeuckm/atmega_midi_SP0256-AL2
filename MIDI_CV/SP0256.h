@@ -89,14 +89,14 @@ class SP0256
 {
 
   public:
-    SP0256(int aldPin, int lrqPin, int sePin);
+    SP0256(int aldPin, int lrqPin, int sePin, int resetPin);
     
-    void speak(byte *allophones, byte count);
+    void speakList(byte *allophones, byte count);
     void speak( byte allophone );
     void reset(void);
 
   private:
-    int PIN_ALD, PIN_LRQ, PIN_SE;
+    int PIN_ALD, PIN_LRQ, PIN_SE, PIN_RESET;
     
 };
 

@@ -2286,8 +2286,8 @@ design rules under a new name.</description>
 <signal name="N$9">
 <contactref element="R10" pad="2"/>
 <contactref element="AMT" pad="3"/>
-<wire x1="68.58" y1="3.81" x2="71.12" y2="6.35" width="1.016" layer="16"/>
-<wire x1="68.58" y1="3.81" x2="65.96" y2="3.81" width="1.016" layer="16"/>
+<wire x1="66.04" y1="3.81" x2="71.12" y2="6.35" width="1.016" layer="16"/>
+<wire x1="66.04" y1="3.81" x2="65.96" y2="3.81" width="1.016" layer="16"/>
 </signal>
 <signal name="N$12">
 <contactref element="U4" pad="2"/>
