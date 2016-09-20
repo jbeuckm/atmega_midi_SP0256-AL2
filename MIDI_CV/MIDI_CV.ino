@@ -34,7 +34,7 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
   notePlaying = true;
 
 //  speechSynth.speak(noteLists[pitch].list, noteLists[pitch].count);
-//byte purple[] = {0x09, 0x33, 0x09, 0x2d };
+byte purple[] = {0x09, 0x33, 0x09, 0x2d };
 //  speechSynth.speakList(purple, 0x04);
 
   digitalWrite(GATE_PIN, HIGH);
