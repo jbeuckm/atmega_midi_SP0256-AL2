@@ -2277,8 +2277,8 @@ design rules under a new name.</description>
 <wire x1="53.848" y1="17.78" x2="52.07" y2="17.78" width="0.8128" layer="16"/>
 <wire x1="55.753" y1="15.875" x2="53.848" y2="17.78" width="0.8128" layer="16"/>
 <wire x1="78.74" y1="15.875" x2="55.753" y2="15.875" width="0.8128" layer="16"/>
-<wire x1="80.645" y1="24.13" x2="78.74" y2="15.875" width="0.8128" layer="16"/>
-<wire x1="91.059" y1="35.56" x2="80.645" y2="24.13" width="0.8128" layer="16"/>
+<wire x1="83.693" y1="26.924" x2="78.74" y2="15.875" width="0.8128" layer="16"/>
+<wire x1="91.059" y1="35.56" x2="83.693" y2="26.924" width="0.8128" layer="16"/>
 <wire x1="91.059" y1="48.895" x2="91.059" y2="35.56" width="0.8128" layer="16"/>
 <wire x1="87.63" y1="53.848" x2="91.059" y2="48.895" width="0.8128" layer="16"/>
 <wire x1="87.63" y1="53.848" x2="88.9" y2="56.134" width="0.8128" layer="16"/>
@@ -2286,8 +2286,8 @@ design rules under a new name.</description>
 <signal name="N$9">
 <contactref element="R10" pad="2"/>
 <contactref element="AMT" pad="3"/>
-<wire x1="68.58" y1="3.81" x2="71.12" y2="6.35" width="1.016" layer="16"/>
-<wire x1="68.58" y1="3.81" x2="65.96" y2="3.81" width="1.016" layer="16"/>
+<wire x1="66.04" y1="3.81" x2="71.12" y2="6.35" width="1.016" layer="16"/>
+<wire x1="66.04" y1="3.81" x2="65.96" y2="3.81" width="1.016" layer="16"/>
 </signal>
 <signal name="N$12">
 <contactref element="U4" pad="2"/>
