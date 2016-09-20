@@ -43,7 +43,7 @@ void SP0256::speakList( byte* allophones, byte count ) {
 }
 
 void SP0256::speak( byte allophone ) {
-//   while ( digitalRead(PIN_LRQ) == HIGH ); // Wait for LRQ to go low
+   while ( digitalRead(PIN_LRQ) == HIGH ); // Wait for LRQ to go low
 
   PORTC = allophone; // select the allophone
 
