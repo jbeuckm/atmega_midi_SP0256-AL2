@@ -101,7 +101,10 @@ void handleSystemExclusive(byte message[], unsigned size) {
     // speak a word
     case 1:
       count = size-6; // disclude first five and eox byte
+
+      digitalWrite(LED_PIN, HIGH);
       speechSynth.speakList(&message[5], count);
+      digitalWrite(LED_PIN, LOW);
 
       if (notePlaying) {
         assignListToNote(currentNote, &message[5], count);
@@ -150,9 +153,6 @@ void setup()
   }
 
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
-
-  
   digitalWrite(LED_PIN, LOW);
 
   pinMode(GATE_PIN, OUTPUT);
