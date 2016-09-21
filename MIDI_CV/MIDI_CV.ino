@@ -27,7 +27,7 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
   if (notePlaying) return;
   notePlaying = true;
 
-//  speechSynth.speak(noteAssignments[pitch].list, noteAssignments[pitch].count);
+  speechSynth.speakList(noteAssignments[pitch].list, noteAssignments[pitch].count);
 
   currentNote = pitch;
 
@@ -81,6 +81,11 @@ void handleSystemExclusive(byte message[], unsigned size) {
     case 1:
       count = size-6; // disclude first five and eox byte
       speechSynth.speakList(&message[5], count);
+
+      if (notePlaying) {
+        assignListToNote(currentNote, &message[5], count);
+      }
+      
       break;
 
     // assign a word to a midi note number
@@ -88,8 +93,7 @@ void handleSystemExclusive(byte message[], unsigned size) {
       byte notenum;
       notenum = message[5];
       count = size-7; // disclude first five, note number and eox byte
-//      noteAssignments[notenum].list = &message[6];
-//      noteAssignments[notenum].count = count;
+      assignListToNote(notenum, &message[6], count);
       break;
      
     // save current configuration to default
@@ -125,10 +129,6 @@ void setup()
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 
-    for (int i=0; i<128; i++) {
-      
-    }
-
     
     digitalWrite(LED_PIN, LOW);
 
@@ -148,6 +148,15 @@ void setup()
     byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
   speechSynth.speakList(readyWord, 7);
 
+}
+
+void assignListToNote(byte notenum, byte *list, byte count) {
+
+  byte *newList = malloc(count);
+  memcpy(newList, list, count);
+  
+  noteAssignments[notenum].list = newList;
+  noteAssignments[notenum].count = count;
 }
 
 

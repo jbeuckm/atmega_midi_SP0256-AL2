@@ -37,7 +37,6 @@ SP0256::SP0256(int aldPin, int lrqPin, int sePin, int resetPin) {
 
 
 void SP0256::speakList( byte* allophones, byte count ) {
-  reset();
   for( byte b = 0; b < count; b++ ) {
     speak( allophones[b] );
   }
