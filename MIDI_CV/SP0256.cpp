@@ -37,6 +37,7 @@ SP0256::SP0256(int aldPin, int lrqPin, int sePin, int resetPin) {
 
 
 void SP0256::speakList( byte* allophones, byte count ) {
+  reset();
   for( byte b = 0; b < count; b++ ) {
     speak( allophones[b] );
   }
@@ -55,7 +56,7 @@ void SP0256::speak( byte allophone ) {
 
 void SP0256::reset() {
   digitalWrite(PIN_RESET, LOW);
-  delay(10);
+  delayMicroseconds(10);
   digitalWrite(PIN_RESET, HIGH);
 }
 
