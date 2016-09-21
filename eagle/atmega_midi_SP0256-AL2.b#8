@@ -2625,6 +2625,13 @@ design rules under a new name.</description>
 <wire x1="58.42" y1="37.465" x2="55.88" y2="40.64" width="0.8128" layer="16"/>
 <wire x1="58.42" y1="36.83" x2="58.42" y2="37.465" width="0.8128" layer="16"/>
 </signal>
+<signal name="N$1">
+<contactref element="U2" pad="15"/>
+<contactref element="U3" pad="P$2"/>
+<contactref element="U3" pad="P$25"/>
+<wire x1="69.85" y1="43.18" x2="74.93" y2="58.42" width="0" layer="19" extent="1-1"/>
+<wire x1="68.58" y1="36.83" x2="69.85" y2="43.18" width="0" layer="19" extent="1-1"/>
+</signal>
 </signals>
 </board>
 </drawing>

@@ -2210,9 +2210,9 @@ design rules under a new name.</description>
 <contactref element="U3" pad="P$7"/>
 <contactref element="U3" pad="P$23"/>
 <wire x1="64.77" y1="43.815" x2="64.77" y2="43.18" width="0.8128" layer="16"/>
-<wire x1="62.865" y1="55.88" x2="65.786" y2="45.72" width="1.016" layer="16"/>
-<wire x1="65.786" y1="45.72" x2="64.77" y2="43.815" width="1.016" layer="16"/>
-<wire x1="62.23" y1="57.785" x2="62.865" y2="55.88" width="1.016" layer="16"/>
+<wire x1="62.357" y1="54.864" x2="64.516" y2="49.53" width="1.016" layer="16"/>
+<wire x1="64.516" y1="49.53" x2="64.77" y2="43.815" width="1.016" layer="16"/>
+<wire x1="62.23" y1="57.785" x2="62.357" y2="54.864" width="1.016" layer="16"/>
 <wire x1="62.23" y1="58.42" x2="62.23" y2="57.785" width="0.8128" layer="16"/>
 <wire x1="64.77" y1="43.18" x2="64.77" y2="42.545" width="0.8128" layer="16"/>
 <wire x1="28.194" y1="45.974" x2="30.48" y2="46.99" width="1.016" layer="16"/>

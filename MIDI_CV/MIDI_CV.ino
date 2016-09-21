@@ -1,6 +1,7 @@
 #include <MIDI.h>
 #include <EEPROM.h>
 #include "SP0256.h"
+#include "AllophoneList.h"
 
 #define LED_PIN 6
 #define GATE_PIN 4
@@ -14,28 +15,21 @@ byte selectedChannel;
 MIDI_CREATE_DEFAULT_INSTANCE();
 
 SP0256 speechSynth(12, 11, 13, 9);
-/*
-class AllophoneList {
-  public:
-    byte list[];
-    byte count;
-};
-
 
 // a word for each midi note
-AllophoneList noteLists[128];
-*/
+AllophoneList noteAssignments[128];
 
 boolean notePlaying = false;
+byte currentNote;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
   if (notePlaying) return;
   notePlaying = true;
 
-//  speechSynth.speak(noteLists[pitch].list, noteLists[pitch].count);
-byte purple[] = {0x09, 0x33, 0x09, 0x2d, 0x03 };
-  speechSynth.speakList(purple, 0x05);
+//  speechSynth.speak(noteAssignments[pitch].list, noteAssignments[pitch].count);
+
+  currentNote = pitch;
 
   digitalWrite(GATE_PIN, HIGH);
   digitalWrite(LED_PIN, HIGH);
@@ -70,7 +64,9 @@ void setMidiChannel(int channel) {
 }
 
 void handleSystemExclusive(byte message[], unsigned size) {
-  
+
+  byte count;
+
   if (message[1] != 0x77) return;      // manufacturer ID
   if (message[2] != 0x34) return;      // model ID
   if (message[3] != 1) return;  // device ID
@@ -83,15 +79,17 @@ void handleSystemExclusive(byte message[], unsigned size) {
 
     // speak a word
     case 1:
-      speechSynth.speakList(&message[5], size-6);
+      count = size-6; // disclude first five and eox byte
+      speechSynth.speakList(&message[5], count);
       break;
 
     // assign a word to a midi note number
     case 2:
-      byte i;
-      i = message[5];
-//      noteLists[i].list = &message[6];
-//      noteLists[i].count = size-7;
+      byte notenum;
+      notenum = message[5];
+      count = size-7; // disclude first five, note number and eox byte
+//      noteAssignments[notenum].list = &message[6];
+//      noteAssignments[notenum].count = count;
       break;
      
     // save current configuration to default
@@ -121,9 +119,17 @@ void setup()
     selectedChannel = 1;
     EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
   }
+  
     selectedChannel = 1;
 
     pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, HIGH);
+
+    for (int i=0; i<128; i++) {
+      
+    }
+
+    
     digitalWrite(LED_PIN, LOW);
 
     pinMode(GATE_PIN, OUTPUT);
@@ -138,6 +144,10 @@ void setup()
     MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
     MIDI.begin(selectedChannel);
+
+    byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
+  speechSynth.speakList(readyWord, 7);
+
 }
 
 
