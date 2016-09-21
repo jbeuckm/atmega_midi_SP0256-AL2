@@ -8,7 +8,9 @@
 
 #define ALL_NOTES_OFF 123
 
-#define MIDI_CHANNEL_ADDRESS 0
+#define NOTE_ASSIGNMENT_ADDRESS 1 // where to store the allophone lists
+
+#define MIDI_CHANNEL_ADDRESS 0  // where to store the configured MIDI channel
 byte selectedChannel;
 
 
@@ -19,20 +21,36 @@ SP0256 speechSynth(12, 11, 13, 9);
 // a word for each midi note
 AllophoneList noteAssignments[128];
 
+void saveConfiguration() {
+  int address = NOTE_ASSIGNMENT_ADDRESS;
+
+  for (int i=0; i<128; i++) {
+    address = noteAssignments[i].serialize(address);
+  }
+}
+
+void loadConfiguration() {
+  int address = NOTE_ASSIGNMENT_ADDRESS;
+
+  for (int i=0; i<128; i++) {
+    address = noteAssignments[i].deserialize(address);
+  }
+}
+
+
 boolean notePlaying = false;
 byte currentNote;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
   if (notePlaying) return;
-  notePlaying = true;
-
-  speechSynth.speakList(noteAssignments[pitch].list, noteAssignments[pitch].count);
-
   currentNote = pitch;
+  notePlaying = true;
 
   digitalWrite(GATE_PIN, HIGH);
   digitalWrite(LED_PIN, HIGH);
+
+  speechSynth.speakList(noteAssignments[pitch].list, noteAssignments[pitch].count);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
@@ -62,6 +80,9 @@ void setMidiChannel(int channel) {
     EEPROM.write(MIDI_CHANNEL_ADDRESS, channel);
     MIDI.begin(channel);
 }
+
+
+
 
 void handleSystemExclusive(byte message[], unsigned size) {
 
@@ -96,15 +117,17 @@ void handleSystemExclusive(byte message[], unsigned size) {
       assignListToNote(notenum, &message[6], count);
       break;
      
-    // save current configuration to default
+    // save current configuration to eeprom
     case 3:
+      saveConfiguration();
       break;
       
-    // request dump current configuration
+    // load eeprom configuration
     case 4:
+      loadConfiguration();
       break;
       
-    // load current configuration
+    // midi sysex dump current configuration
     case 5:
       break;
       
@@ -113,6 +136,8 @@ void handleSystemExclusive(byte message[], unsigned size) {
   }
 
 }
+
+
 
 // -----------------------------------------------------------------------------
 
@@ -123,31 +148,30 @@ void setup()
     selectedChannel = 1;
     EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
   }
+
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
+
   
-    selectedChannel = 1;
+  digitalWrite(LED_PIN, LOW);
 
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
+  pinMode(GATE_PIN, OUTPUT);
+  digitalWrite(GATE_PIN, LOW);
 
+  MIDI.setHandleNoteOn(handleNoteOn);
+  MIDI.setHandleNoteOff(handleNoteOff);
+  MIDI.setHandlePitchBend(handlePitchBend);
+  MIDI.setHandleControlChange(handleControlChange);
+  MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
-    digitalWrite(LED_PIN, LOW);
+  MIDI.begin(selectedChannel);
 
-    pinMode(GATE_PIN, OUTPUT);
-    digitalWrite(GATE_PIN, LOW);
+  loadConfiguration();
 
-    speechSynth.reset();
+  speechSynth.reset();
 
-    MIDI.setHandleNoteOn(handleNoteOn);
-    MIDI.setHandleNoteOff(handleNoteOff);
-    MIDI.setHandlePitchBend(handlePitchBend);
-    MIDI.setHandleControlChange(handleControlChange);
-    MIDI.setHandleSystemExclusive(handleSystemExclusive);
-    
-    MIDI.begin(selectedChannel);
-
-    byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
+  byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
   speechSynth.speakList(readyWord, 7);
-
 }
 
 void assignListToNote(byte notenum, byte *list, byte count) {
