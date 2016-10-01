@@ -15,7 +15,6 @@ After words have been assigned to keys, the device operates as a monophonic synt
 If a "speak word" message is received while a key is down, the word is assigned to that key.
 
 
-
 ![midi sp0256-al2 layout](atmega_midi_sp0256-al2.png)
 
 This board provides a handy "gate" output that represents the key-down status of incoming MIDI signal.
