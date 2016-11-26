@@ -22,7 +22,7 @@ SP0256::SP0256(int aldPin, int lrqPin, int sePin, int resetPin) {
     
   pinMode( PIN_LRQ, INPUT );
     
-  DDRC = B00111111;  // Sets Analog pins 0-5 to output
+  DDRB = B00111111;  // Sets PORTB pins 0-5 to output
 
   digitalWrite(PIN_ALD, HIGH);
   digitalWrite(PIN_SE, HIGH);
@@ -45,7 +45,7 @@ void SP0256::speakList( byte* allophones, byte count ) {
 void SP0256::speak( byte allophone ) {
    while ( digitalRead(PIN_LRQ) == HIGH ); // Wait for LRQ to go low
 
-  PORTC = allophone; // select the allophone
+  PORTB = allophone; // select the allophone
 
   // Tell it to speak by toggling ALD
   digitalWrite(PIN_ALD, LOW);

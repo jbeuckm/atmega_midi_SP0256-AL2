@@ -16,7 +16,7 @@ byte selectedChannel;
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-SP0256 speechSynth(12, 11, 13, 9);
+SP0256 speechSynth(A2, A0, A1, A3);
 
 // a word for each midi note
 AllophoneList noteAssignments[128];
