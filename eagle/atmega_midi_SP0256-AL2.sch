@@ -14940,61 +14940,6 @@ NS Package M08A</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="solpad">
-<description>&lt;b&gt;Solder Pads/Test Points&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="LSP11">
-<description>&lt;b&gt;SOLDER PAD&lt;/b&gt;&lt;p&gt;
-drill 1.1 mm</description>
-<wire x1="-1.27" y1="0.254" x2="-1.27" y2="-0.254" width="0.1524" layer="21"/>
-<wire x1="1.27" y1="0.254" x2="1.27" y2="-0.254" width="0.1524" layer="21"/>
-<wire x1="1.27" y1="0.254" x2="1.143" y2="0.254" width="0.1524" layer="21"/>
-<wire x1="1.27" y1="-0.254" x2="1.143" y2="-0.254" width="0.1524" layer="21"/>
-<wire x1="-1.27" y1="-0.254" x2="-1.143" y2="-0.254" width="0.1524" layer="21"/>
-<wire x1="-1.27" y1="0.254" x2="-1.143" y2="0.254" width="0.1524" layer="21"/>
-<wire x1="1.143" y1="0.254" x2="0.635" y2="0.254" width="0.1524" layer="51"/>
-<wire x1="-1.143" y1="-0.254" x2="-0.635" y2="-0.254" width="0.1524" layer="51"/>
-<wire x1="0.635" y1="0.254" x2="0.635" y2="-0.254" width="0.1524" layer="51"/>
-<wire x1="0.635" y1="0.254" x2="-0.635" y2="0.254" width="0.1524" layer="51"/>
-<wire x1="0.635" y1="-0.254" x2="1.143" y2="-0.254" width="0.1524" layer="51"/>
-<wire x1="-0.635" y1="0.254" x2="-0.635" y2="-0.254" width="0.1524" layer="51"/>
-<wire x1="-0.635" y1="0.254" x2="-1.143" y2="0.254" width="0.1524" layer="51"/>
-<wire x1="-0.635" y1="-0.254" x2="0.635" y2="-0.254" width="0.1524" layer="51"/>
-<pad name="MP" x="0" y="0" drill="1.1176" diameter="2.159" shape="octagon"/>
-<text x="-1.27" y="1.27" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="0" y="0.254" size="0.0254" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="LSP">
-<wire x1="-1.016" y1="2.032" x2="1.016" y2="0" width="0.254" layer="94"/>
-<wire x1="-1.016" y1="0" x2="1.016" y2="2.032" width="0.254" layer="94"/>
-<circle x="0" y="1.016" radius="1.016" width="0.4064" layer="94"/>
-<text x="-1.27" y="2.921" size="1.778" layer="95">&gt;NAME</text>
-<pin name="MP" x="0" y="-2.54" visible="off" length="short" direction="pas" rot="R90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="LSP11" prefix="LSP">
-<description>&lt;b&gt;SOLDER PAD&lt;/b&gt;&lt;p&gt;
-drill 1.1 mm</description>
-<gates>
-<gate name="1" symbol="LSP" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="LSP11">
-<connects>
-<connect gate="1" pin="MP" pad="MP"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="linear-technology-3">
 <description>&lt;b&gt;Linear Technology Devices&lt;/b&gt;&lt;p&gt;
 http://www.linear.com&lt;p&gt;
@@ -15117,6 +15062,64 @@ I²C Interface
 </deviceset>
 </devicesets>
 </library>
+<library name="con-molex">
+<description>&lt;b&gt;Molex Connectors&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="22-23-2021">
+<description>.100" (2.54mm) Center Headers - 2 Pin</description>
+<wire x1="-2.54" y1="3.175" x2="2.54" y2="3.175" width="0.254" layer="21"/>
+<wire x1="2.54" y1="3.175" x2="2.54" y2="1.27" width="0.254" layer="21"/>
+<wire x1="2.54" y1="1.27" x2="2.54" y2="-3.175" width="0.254" layer="21"/>
+<wire x1="2.54" y1="-3.175" x2="-2.54" y2="-3.175" width="0.254" layer="21"/>
+<wire x1="-2.54" y1="-3.175" x2="-2.54" y2="1.27" width="0.254" layer="21"/>
+<wire x1="-2.54" y1="1.27" x2="-2.54" y2="3.175" width="0.254" layer="21"/>
+<wire x1="-2.54" y1="1.27" x2="2.54" y2="1.27" width="0.254" layer="21"/>
+<pad name="1" x="-1.27" y="0" drill="1" shape="long" rot="R90"/>
+<pad name="2" x="1.27" y="0" drill="1" shape="long" rot="R90"/>
+<text x="-2.54" y="3.81" size="1.016" layer="25" ratio="10">&gt;NAME</text>
+<text x="-2.54" y="-5.08" size="1.016" layer="27" ratio="10">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="MV">
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.6096" layer="94"/>
+<text x="2.54" y="-0.762" size="1.524" layer="95">&gt;NAME</text>
+<text x="-0.762" y="1.397" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="S" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+</symbol>
+<symbol name="M">
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.6096" layer="94"/>
+<text x="2.54" y="-0.762" size="1.524" layer="95">&gt;NAME</text>
+<pin name="S" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="22-23-2021" prefix="X">
+<description>.100" (2.54mm) Center Header - 2 Pin</description>
+<gates>
+<gate name="-1" symbol="MV" x="0" y="0" addlevel="always" swaplevel="1"/>
+<gate name="-2" symbol="M" x="0" y="-2.54" addlevel="always" swaplevel="1"/>
+</gates>
+<devices>
+<device name="" package="22-23-2021">
+<connects>
+<connect gate="-1" pin="S" pad="1"/>
+<connect gate="-2" pin="S" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="MOLEX" constant="no"/>
+<attribute name="MPN" value="22-23-2021" constant="no"/>
+<attribute name="OC_FARNELL" value="1462926" constant="no"/>
+<attribute name="OC_NEWARK" value="25C3832" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -15167,11 +15170,9 @@ I²C Interface
 <part name="C12" library="rcl" deviceset="C-US" device="025-030X050" value="100n"/>
 <part name="MIDI_IN" library="adafruit" deviceset="MIDIJACK" device=""/>
 <part name="U3" library="speech" deviceset="SP0256-AL2" device=""/>
-<part name="C13" library="rcl" deviceset="CPOL-US" device="B45181A" value="1uF"/>
+<part name="C13" library="rcl" deviceset="CPOL-US" device="E15-6AXIAL" value="1uF"/>
 <part name="P+3" library="supply1" deviceset="+5V" device=""/>
 <part name="P+6" library="supply1" deviceset="+5V" device=""/>
-<part name="RESET" library="solpad" deviceset="LSP11" device=""/>
-<part name="RESET2" library="solpad" deviceset="LSP11" device=""/>
 <part name="GND12" library="supply1" deviceset="GND" device=""/>
 <part name="GND11" library="supply1" deviceset="GND" device=""/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
@@ -15197,6 +15198,9 @@ I²C Interface
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="R6" library="rcl" deviceset="R-US_" device="0207/7" value="10k"/>
 <part name="GND6" library="supply1" deviceset="GND" device=""/>
+<part name="GND10" library="supply1" deviceset="GND" device=""/>
+<part name="P+11" library="supply1" deviceset="+5V" device=""/>
+<part name="RESET" library="con-molex" deviceset="22-23-2021" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15243,8 +15247,6 @@ I²C Interface
 <instance part="C13" gate="G$1" x="99.06" y="10.16" rot="R90"/>
 <instance part="P+3" gate="1" x="127" y="63.5"/>
 <instance part="P+6" gate="1" x="81.28" y="60.96"/>
-<instance part="RESET" gate="1" x="0" y="86.36"/>
-<instance part="RESET2" gate="1" x="5.08" y="86.36"/>
 <instance part="MIDI_IN" gate="G$2" x="-35.56" y="96.52" rot="R180"/>
 <instance part="MIDI_IN" gate="G$3" x="-35.56" y="93.98" rot="R180"/>
 <instance part="MIDI_IN" gate="G$4" x="-35.56" y="91.44" rot="R180"/>
@@ -15275,6 +15277,10 @@ I²C Interface
 <instance part="GND3" gate="1" x="180.34" y="-15.24"/>
 <instance part="R6" gate="G$1" x="81.28" y="-10.16" rot="R90"/>
 <instance part="GND6" gate="1" x="81.28" y="-20.32"/>
+<instance part="GND10" gate="1" x="119.38" y="68.58"/>
+<instance part="P+11" gate="1" x="43.18" y="81.28"/>
+<instance part="RESET" gate="-1" x="0" y="86.36" rot="MR90"/>
+<instance part="RESET" gate="-2" x="-2.54" y="86.36" rot="MR90"/>
 </instances>
 <busses>
 </busses>
@@ -15411,6 +15417,12 @@ I²C Interface
 <pinref part="P+9" gate="1" pin="+5V"/>
 <wire x1="33.02" y1="-5.08" x2="33.02" y2="-10.16" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="U2" gate="G$1" pin="PC1(ADC1)"/>
+<pinref part="P+11" gate="1" pin="+5V"/>
+<wire x1="40.64" y1="71.12" x2="43.18" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="71.12" x2="43.18" y2="78.74" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="+12V" class="0">
 <segment>
@@ -15483,12 +15495,12 @@ I²C Interface
 <net name="N$43" class="0">
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="0" y1="83.82" x2="-7.62" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="83.82" x2="-7.62" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="PC6(/RESET)"/>
 <wire x1="-7.62" y1="83.82" x2="-10.16" y2="83.82" width="0.1524" layer="91"/>
 <wire x1="-7.62" y1="73.66" x2="-7.62" y2="83.82" width="0.1524" layer="91"/>
 <junction x="-7.62" y="83.82"/>
-<pinref part="RESET" gate="1" pin="MP"/>
+<pinref part="RESET" gate="-2" pin="S"/>
 </segment>
 </net>
 <net name="N$11" class="0">
@@ -15549,9 +15561,9 @@ I²C Interface
 <junction x="119.38" y="20.32"/>
 </segment>
 <segment>
-<wire x1="5.08" y1="83.82" x2="20.32" y2="83.82" width="0.1524" layer="91"/>
-<pinref part="RESET2" gate="1" pin="MP"/>
+<wire x1="0" y1="83.82" x2="20.32" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="GND2" gate="1" pin="GND"/>
+<pinref part="RESET" gate="-1" pin="S"/>
 </segment>
 <segment>
 <wire x1="40.64" y1="101.6" x2="40.64" y2="93.98" width="0.1524" layer="91"/>
@@ -15635,6 +15647,13 @@ I²C Interface
 <pinref part="R6" gate="G$1" pin="1"/>
 <pinref part="GND6" gate="1" pin="GND"/>
 <wire x1="81.28" y1="-17.78" x2="81.28" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U3" gate="G$1" pin="A8"/>
+<pinref part="GND10" gate="1" pin="GND"/>
+<pinref part="U3" gate="G$1" pin="A7"/>
+<wire x1="119.38" y1="76.2" x2="119.38" y2="71.12" width="0.1524" layer="91"/>
+<junction x="119.38" y="71.12"/>
 </segment>
 </net>
 <net name="-12V" class="0">
@@ -15791,17 +15810,17 @@ I²C Interface
 </net>
 <net name="N$1" class="0">
 <segment>
-<wire x1="63.5" y1="40.64" x2="63.5" y2="2.54" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="2.54" x2="124.46" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="40.64" x2="66.04" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="2.54" x2="124.46" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="124.46" y1="2.54" x2="124.46" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="!RESET"/>
 <wire x1="124.46" y1="30.48" x2="119.38" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="!SBYRESET"/>
-<wire x1="83.82" y1="40.64" x2="63.5" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="40.64" x2="63.5" y2="66.04" width="0.1524" layer="91"/>
-<junction x="63.5" y="40.64"/>
-<pinref part="U2" gate="G$1" pin="PC3(ADC3)"/>
-<wire x1="40.64" y1="66.04" x2="63.5" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="40.64" x2="66.04" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="66.04" y1="40.64" x2="66.04" y2="68.58" width="0.1524" layer="91"/>
+<junction x="66.04" y="40.64"/>
+<pinref part="U2" gate="G$1" pin="PC2(ADC2)"/>
+<wire x1="40.64" y1="68.58" x2="66.04" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$33" class="0">
@@ -15822,10 +15841,10 @@ I²C Interface
 <net name="N$10" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="!ALD"/>
-<wire x1="83.82" y1="66.04" x2="68.58" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="66.04" x2="60.96" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="PD6(AIN0)"/>
-<wire x1="40.64" y1="35.56" x2="68.58" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="68.58" y1="35.56" x2="68.58" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="35.56" x2="60.96" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="35.56" x2="60.96" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="A0" class="0">
@@ -15865,10 +15884,21 @@ I²C Interface
 <net name="N$16" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="SE"/>
-<wire x1="83.82" y1="71.12" x2="55.88" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="55.88" y1="71.12" x2="55.88" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="71.12" x2="58.42" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="71.12" x2="58.42" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="PD7(AIN1)"/>
-<wire x1="55.88" y1="33.02" x2="40.64" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="33.02" x2="40.64" y2="33.02" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$19" class="0">
+<segment>
+<pinref part="U2" gate="G$1" pin="PC3(ADC3)"/>
+<wire x1="40.64" y1="66.04" x2="55.88" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="66.04" x2="55.88" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="55.88" y1="2.54" x2="30.48" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="2.54" x2="30.48" y2="-12.7" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="ADR"/>
+<wire x1="30.48" y1="-12.7" x2="33.02" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

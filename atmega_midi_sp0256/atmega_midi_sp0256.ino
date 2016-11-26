@@ -2,6 +2,7 @@
 #include <EEPROM.h>
 #include "SP0256.h"
 #include "AllophoneList.h"
+#include <Wire.h>
 
 #define LED_PIN 6
 #define GATE_PIN 4
@@ -16,7 +17,7 @@ byte selectedChannel;
 
 MIDI_CREATE_DEFAULT_INSTANCE();
 
-SP0256 speechSynth(A2, A0, A1, A3);
+SP0256 speechSynth(6, A0, 7, A2);
 
 // a word for each midi note
 AllophoneList noteAssignments[128];
@@ -168,6 +169,8 @@ void setup()
 
   loadConfiguration();
 
+  Wire.begin(); // join i2c bus (address optional for master)
+
   speechSynth.reset();
 
   byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
@@ -183,9 +186,14 @@ void assignListToNote(byte notenum, byte *list, byte count) {
   noteAssignments[notenum].count = count;
 }
 
+byte pitchCode;
 
 void loop()
 {
-    MIDI.read();
+  Wire.beginTransmission(B0010111); // i2c address is B0010111
+  Wire.write(pitchCode);              // sends one byte
+  Wire.endTransmission();    // stop transmitting
+
+  MIDI.read();
 }
 
