@@ -91,6 +91,23 @@ void setFrequency(byte octave, unsigned int dacFrequency) {
 }
 
 
+void setFreqKhz(float freq) 
+{
+  unsigned int oct = (int) (3.322*log10(freq * 1000.0 / 1039.0));
+  unsigned int dac = (int) (2048.0 - 2078.0 * pow(2, 10 + oct) / (freq * 1000.0) + 0.5);
+   
+  unsigned int reg = oct << 12 | dac << 2 | LTC_CONFIG;
+   
+  byte high = (reg >> 8) & 0xff;
+  byte low = reg & 0xff;
+   
+  Wire.beginTransmission(LTC_ADDRESS);
+  Wire.write(high);
+  Wire.write(low);
+  Wire.endTransmission();  
+}
+
+
 void assignListToNote(byte notenum, byte *list, byte count) {
 
   byte *newList = malloc(count);
