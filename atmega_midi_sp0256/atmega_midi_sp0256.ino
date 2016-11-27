@@ -162,12 +162,16 @@ void handleSystemExclusive(byte message[], unsigned size) {
       loadConfiguration();
       break;
       
-    // midi sysex dump current configuration
+    // request midi sysex dump current configuration
     case 5:
       break;
       
+    // accept midi sysex dump current configuration
+    case 6:
+      break;
+      
     // set clock frequency of the LTC6904
-    case 6: 
+    case 7: 
       {
         int clockFrequency = ((int)message[5] << 7);
         clockFrequency |= message[6];

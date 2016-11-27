@@ -9,6 +9,7 @@ Speak Word | F0    | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
 Assign Word| F0    | 77 34 01 02  | nn (note #) a1 a2 a3 ... (allophones) | f7
 Save Config| F0    | 77 34 01 03  | (none) | f7
 Load Config| F0    | 77 34 01 04  | (none) | f7
+Dump Request| F0    | 77 34 01 05  | (none) | f7
 Sysex Dump | F0    | 77 34 01 05  | (none) | f7
 Clock Freq | F0    | 77 34 01 06  | 0\[bits 13-7\] 0\[bits 6-0\] (khz) | f7
 
