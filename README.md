@@ -2,13 +2,13 @@ Accepts MIDI signals to control a speech synthesizer IC.
 
 ## MIDI Sysex Messages
 
-Function   | Prefix       | Message | Suffix
+Function   | Start | Prefix       | Message | End
 -----------|--------------|---------|-------
-Set Channel| 77 34 01 00  | cc | f7
-Speak Word | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
-Assign Word| 77 34 01 02  | nn (note #) a1 a2 a3 ... (allophones) | f7
-Save Config| 77 34 01 03  | (none) | f7
-Load Config| 77 34 01 04  | (none) | f7
+Set Channel| F0    | 77 34 01 00  | cc | f7
+Speak Word | F0    | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
+Assign Word| F0    | 77 34 01 02  | nn (note #) a1 a2 a3 ... (allophones) | f7
+Save Config| F0    | 77 34 01 03  | (none) | f7
+Load Config| F0    | 77 34 01 04  | (none) | f7
 
 After words have been assigned to keys, the device operates as a monophonic synthesizer, playing the word assigned to a key when that key is pressed.
 
@@ -21,5 +21,5 @@ This board provides a handy "gate" output that represents the key-down status of
 
 ###Big plans:###
 
-* Add LT6903 (or something) and control pitch.
+* Add LT6904 (or something) and control pitch.
 
