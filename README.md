@@ -8,9 +8,7 @@ Set Channel| F0    | 77 34 01 00  | cc | f7
 Speak Word | F0    | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
 Assign Note On Word | F0    | 77 34 01 02 | nn (note #) a1 a2 a3 ... (allophones) | f7
 Assign Note Off Word| F0    | 77 34 01 03 | nn (note #) a1 a2 a3 ... (allophones) | f7
-
 Clock Freq | F0    | 77 34 01 40  | 0\[bits 13-7\] 0\[bits 6-0\] (khz) | f7
-
 Save Config| F0    | 77 34 01 70  | (none) | f7
 Load Config| F0    | 77 34 01 71  | (none) | f7
 Dump Request| F0    | 77 34 01 72  | (none) | f7

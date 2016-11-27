@@ -4,7 +4,7 @@
 #include "AllophoneList.h"
 #include <Wire.h>
 
-#define LTC_ADDRESS B0010110
+#define LTC_ADDRESS B0010111
 #define ADR_PIN A3
 #define LTC_CONFIG B01  // CLK off and ~CLK on
 
@@ -112,7 +112,7 @@ void setFreqKhz(float freq)
   unsigned int oct = (int) (3.322*log10(freq * 1000.0 / 1039.0));
   unsigned int dac = (int) (2048.0 - 2078.0 * pow(2, 10 + oct) / (freq * 1000.0) + 0.5);
    
-  unsigned int reg = oct << 12 | dac << 2 | LTC_CONFIG;
+  unsigned int reg = (oct << 12) | (dac << 2) | LTC_CONFIG;
    
   byte high = (reg >> 8) & 0xff;
   byte low = reg & 0xff;
@@ -225,6 +225,15 @@ void handleSystemExclusive(byte message[], unsigned size) {
 
 void setup()
 {
+
+  pinMode(ADR_PIN, OUTPUT);
+  digitalWrite(ADR_PIN, LOW);
+
+  Wire.begin();
+  setFreqKhz(3120);
+  
+  speechSynth.reset();
+
   loadConfiguration();
 
   baseChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
@@ -232,14 +241,6 @@ void setup()
     baseChannel = 1;
     EEPROM.write(MIDI_CHANNEL_ADDRESS, baseChannel);
   }
-
-  pinMode(ADR_PIN, OUTPUT);
-  digitalWrite(ADR_PIN, LOW);
-
-  Wire.begin();
-  setFrequency(11, 0);
-  
-  speechSynth.reset();
 
   byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
   speechSynth.speakList(readyWord, 7);
@@ -250,7 +251,7 @@ void setup()
   MIDI.setHandleControlChange(handleControlChange);
   MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
-  MIDI.begin();
+//  MIDI.begin();
 }
 
 
