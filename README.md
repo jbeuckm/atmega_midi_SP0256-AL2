@@ -3,7 +3,7 @@ Accepts MIDI signals to control a speech synthesizer IC.
 ## MIDI Sysex Messages
 
 Function   | Start | Prefix       | Message | End
------------|--------------|---------|-------
+-----------|-------|--------------|---------|-------
 Set Channel| F0    | 77 34 01 00  | cc | f7
 Speak Word | F0    | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
 Assign Word| F0    | 77 34 01 02  | nn (note #) a1 a2 a3 ... (allophones) | f7
