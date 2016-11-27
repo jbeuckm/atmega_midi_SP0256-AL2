@@ -13,7 +13,7 @@
 #define NOTE_ASSIGNMENT_ADDRESS 1 // where to store the allophone lists
 
 #define MIDI_CHANNEL_ADDRESS 0  // where to store the configured MIDI channel
-byte selectedChannel;
+byte baseChannel;
 
 
 MIDI_CREATE_DEFAULT_INSTANCE();
@@ -53,18 +53,25 @@ byte currentNote;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
-  if (notePlaying) return;
-  currentNote = pitch;
-  notePlaying = true;
+  if (channel == baseChannel) {
+      if (notePlaying) return;
+      currentNote = pitch;
+      notePlaying = true;
+    
+      speechSynth.speakList(noteOnAssignments[pitch].list, noteOnAssignments[pitch].count);
+  } 
+  else if (channel == baseChannel+1) {
 
-  speechSynth.speakList(noteOnAssignments[pitch].list, noteOnAssignments[pitch].count);
+  }
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
-  speechSynth.speakList(noteOffAssignments[pitch].list, noteOffAssignments[pitch].count);
-
-  notePlaying = false;
+  if (channel == baseChannel) {
+      speechSynth.speakList(noteOffAssignments[pitch].list, noteOffAssignments[pitch].count);
+    
+      notePlaying = false;
+  }
 }
 
 
@@ -85,7 +92,6 @@ void handlePitchBend(byte channel, int bend)
 
 void setMidiChannel(int channel) {
     EEPROM.write(MIDI_CHANNEL_ADDRESS, channel);
-    MIDI.begin(channel);
 }
 
 
@@ -221,10 +227,10 @@ void setup()
 {
   loadConfiguration();
 
-  selectedChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
-  if (selectedChannel > 16) {
-    selectedChannel = 1;
-    EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
+  baseChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
+  if (baseChannel > 16) {
+    baseChannel = 1;
+    EEPROM.write(MIDI_CHANNEL_ADDRESS, baseChannel);
   }
 
   pinMode(ADR_PIN, OUTPUT);
@@ -244,7 +250,7 @@ void setup()
   MIDI.setHandleControlChange(handleControlChange);
   MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
-  MIDI.begin(selectedChannel);
+  MIDI.begin();
 }
 
 
