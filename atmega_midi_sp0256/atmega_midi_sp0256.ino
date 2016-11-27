@@ -20,14 +20,19 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 
 SP0256 speechSynth(6, A0, 7, A2);
 
-// a word for each midi note
-AllophoneList noteAssignments[128];
+// an allophone list for each midi note on and off
+AllophoneList noteOnAssignments[128];
+AllophoneList noteOffAssignments[128];
+
 
 void saveConfiguration() {
   int address = NOTE_ASSIGNMENT_ADDRESS;
 
   for (int i=0; i<128; i++) {
-    address = noteAssignments[i].serialize(address);
+    address = noteOnAssignments[i].serialize(address);
+  }
+  for (int i=0; i<128; i++) {
+    address = noteOffAssignments[i].serialize(address);
   }
 }
 
@@ -35,7 +40,10 @@ void loadConfiguration() {
   int address = NOTE_ASSIGNMENT_ADDRESS;
 
   for (int i=0; i<128; i++) {
-    address = noteAssignments[i].deserialize(address);
+    address = noteOnAssignments[i].deserialize(address);
+  }
+  for (int i=0; i<128; i++) {
+    address = noteOffAssignments[i].deserialize(address);
   }
 }
 
@@ -49,11 +57,13 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
   currentNote = pitch;
   notePlaying = true;
 
-  speechSynth.speakList(noteAssignments[pitch].list, noteAssignments[pitch].count);
+  speechSynth.speakList(noteOnAssignments[pitch].list, noteOnAssignments[pitch].count);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
+  speechSynth.speakList(noteOffAssignments[pitch].list, noteOffAssignments[pitch].count);
+
   notePlaying = false;
 }
 
@@ -108,13 +118,22 @@ void setFreqKhz(float freq)
 }
 
 
-void assignListToNote(byte notenum, byte *list, byte count) {
+void assignListToNoteOn(byte notenum, byte *list, byte count) {
 
   byte *newList = malloc(count);
   memcpy(newList, list, count);
   
-  noteAssignments[notenum].list = newList;
-  noteAssignments[notenum].count = count;
+  noteOnAssignments[notenum].list = newList;
+  noteOnAssignments[notenum].count = count;
+}
+
+void assignListToNoteOff(byte notenum, byte *list, byte count) {
+
+  byte *newList = malloc(count);
+  memcpy(newList, list, count);
+  
+  noteOffAssignments[notenum].list = newList;
+  noteOffAssignments[notenum].count = count;
 }
 
 
@@ -126,57 +145,65 @@ void handleSystemExclusive(byte message[], unsigned size) {
   if (message[2] != 0x34) return;      // model ID
   if (message[3] != 0x01) return;  // device ID
 
+  byte notenum;
+      
   switch (message[4]) {
     
-    case 0:
+    case 0x00:
       setMidiChannel(message[5]);
       break;
 
     // speak a word
-    case 1:
+    case 0x01:
       count = size-6; // disclude first five and eox byte
 
       speechSynth.speakList(&message[5], count);
 
       if (notePlaying) {
-        assignListToNote(currentNote, &message[5], count);
+        assignListToNoteOn(currentNote, &message[5], count);
       }
       
       break;
 
     // assign a word to a midi note number
-    case 2:
-      byte notenum;
+    case 0x02:
       notenum = message[5];
       count = size-7; // disclude first five, note number and eox byte
-      assignListToNote(notenum, &message[6], count);
+      assignListToNoteOn(notenum, &message[6], count);
       break;
-     
-    // save current configuration to eeprom
-    case 3:
-      saveConfiguration();
-      break;
-      
-    // load eeprom configuration
-    case 4:
-      loadConfiguration();
-      break;
-      
-    // request midi sysex dump current configuration
-    case 5:
-      break;
-      
-    // accept midi sysex dump current configuration
-    case 6:
+
+    // assign a word to a midi note number
+    case 0x03:
+      notenum = message[5];
+      count = size-7; // disclude first five, note number and eox byte
+      assignListToNoteOff(notenum, &message[6], count);
       break;
       
     // set clock frequency of the LTC6904
-    case 7: 
+    case 0x40: 
       {
         int clockFrequency = ((int)message[5] << 7);
         clockFrequency |= message[6];
         setFreqKhz((float)clockFrequency);
       }
+      break;
+     
+    // save current configuration to eeprom
+    case 0x70:
+      saveConfiguration();
+      break;
+      
+    // load eeprom configuration
+    case 0x71:
+      loadConfiguration();
+      break;
+      
+    // request midi sysex dump current configuration
+    case 0x72:
+      break;
+      
+    // accept midi sysex dump current configuration
+    case 0x73:
       break;
       
     default:

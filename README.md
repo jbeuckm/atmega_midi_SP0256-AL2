@@ -6,12 +6,15 @@ Function   | Start | Prefix       | Message | End
 -----------|-------|--------------|---------|-------
 Set Channel| F0    | 77 34 01 00  | cc | f7
 Speak Word | F0    | 77 34 01 01  | a1 a2 a3 ... (allophones) | f7
-Assign Word| F0    | 77 34 01 02  | nn (note #) a1 a2 a3 ... (allophones) | f7
-Save Config| F0    | 77 34 01 03  | (none) | f7
-Load Config| F0    | 77 34 01 04  | (none) | f7
-Dump Request| F0    | 77 34 01 05  | (none) | f7
-Sysex Dump | F0    | 77 34 01 06  | (assignment data) | f7
-Clock Freq | F0    | 77 34 01 07  | 0\[bits 13-7\] 0\[bits 6-0\] (khz) | f7
+Assign Note On Word | F0    | 77 34 01 02 | nn (note #) a1 a2 a3 ... (allophones) | f7
+Assign Note Off Word| F0    | 77 34 01 03 | nn (note #) a1 a2 a3 ... (allophones) | f7
+
+Clock Freq | F0    | 77 34 01 40  | 0\[bits 13-7\] 0\[bits 6-0\] (khz) | f7
+
+Save Config| F0    | 77 34 01 70  | (none) | f7
+Load Config| F0    | 77 34 01 71  | (none) | f7
+Dump Request| F0    | 77 34 01 72  | (none) | f7
+Sysex Dump | F0    | 77 34 01 73  | (assignment data) | f7
 
 After words have been assigned to keys, the device operates as a monophonic synthesizer, playing the word assigned to a key when that key is pressed.
 
