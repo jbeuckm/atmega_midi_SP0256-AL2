@@ -166,6 +166,15 @@ void handleSystemExclusive(byte message[], unsigned size) {
     case 5:
       break;
       
+    // set clock frequency of the LTC6904
+    case 6: 
+      {
+        int clockFrequency = ((int)message[5] << 7);
+        clockFrequency |= message[6];
+        setFreqKhz((float)clockFrequency);
+      }
+      break;
+      
     default:
       break;
   }
