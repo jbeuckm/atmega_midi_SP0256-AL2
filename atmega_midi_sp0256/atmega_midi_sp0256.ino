@@ -4,8 +4,9 @@
 #include "AllophoneList.h"
 #include <Wire.h>
 
-#define LED_PIN 6
-#define GATE_PIN 4
+#define LTC_ADDRESS B0010110
+#define ADR_PIN A3
+#define LTC_CONFIG B01  // CLK off and ~CLK on
 
 #define ALL_NOTES_OFF 123
 
@@ -48,17 +49,12 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
   currentNote = pitch;
   notePlaying = true;
 
-  digitalWrite(GATE_PIN, HIGH);
-  digitalWrite(LED_PIN, HIGH);
-
   speechSynth.speakList(noteAssignments[pitch].list, noteAssignments[pitch].count);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
 {
   notePlaying = false;
-  digitalWrite(GATE_PIN, LOW);
-  digitalWrite(LED_PIN, LOW);
 }
 
 
@@ -83,6 +79,26 @@ void setMidiChannel(int channel) {
 }
 
 
+/*
+ * oct3 oct2 oct1 oct0 dac9 dac8 dac7 dac6
+ * dac5 dac4 dac3 dac2 dac1 dac0 cnf1 cnf0
+ */
+void setFrequency(byte octave, unsigned int dacFrequency) {
+  Wire.beginTransmission(LTC_ADDRESS);
+  Wire.write((octave << 4) | ((dacFrequency >> 6) & B1111));
+  Wire.write(((dacFrequency << 2) & B11111100) | LTC_CONFIG);
+  Wire.endTransmission(); 
+}
+
+
+void assignListToNote(byte notenum, byte *list, byte count) {
+
+  byte *newList = malloc(count);
+  memcpy(newList, list, count);
+  
+  noteAssignments[notenum].list = newList;
+  noteAssignments[notenum].count = count;
+}
 
 
 void handleSystemExclusive(byte message[], unsigned size) {
@@ -91,7 +107,7 @@ void handleSystemExclusive(byte message[], unsigned size) {
 
   if (message[1] != 0x77) return;      // manufacturer ID
   if (message[2] != 0x34) return;      // model ID
-  if (message[3] != 1) return;  // device ID
+  if (message[3] != 0x01) return;  // device ID
 
   switch (message[4]) {
     
@@ -103,9 +119,7 @@ void handleSystemExclusive(byte message[], unsigned size) {
     case 1:
       count = size-6; // disclude first five and eox byte
 
-      digitalWrite(LED_PIN, HIGH);
       speechSynth.speakList(&message[5], count);
-      digitalWrite(LED_PIN, LOW);
 
       if (notePlaying) {
         assignListToNote(currentNote, &message[5], count);
@@ -145,19 +159,27 @@ void handleSystemExclusive(byte message[], unsigned size) {
 
 // -----------------------------------------------------------------------------
 
+
 void setup()
 {
+  loadConfiguration();
+
   selectedChannel = EEPROM.read(MIDI_CHANNEL_ADDRESS);
   if (selectedChannel > 16) {
     selectedChannel = 1;
     EEPROM.write(MIDI_CHANNEL_ADDRESS, selectedChannel);
   }
 
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, LOW);
+  pinMode(ADR_PIN, OUTPUT);
+  digitalWrite(ADR_PIN, LOW);
 
-  pinMode(GATE_PIN, OUTPUT);
-  digitalWrite(GATE_PIN, LOW);
+  Wire.begin();
+  setFrequency(11, 0);
+  
+  speechSynth.reset();
+
+  byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
+  speechSynth.speakList(readyWord, 7);
 
   MIDI.setHandleNoteOn(handleNoteOn);
   MIDI.setHandleNoteOff(handleNoteOff);
@@ -166,34 +188,12 @@ void setup()
   MIDI.setHandleSystemExclusive(handleSystemExclusive);
     
   MIDI.begin(selectedChannel);
-
-  loadConfiguration();
-
-  Wire.begin(); // join i2c bus (address optional for master)
-
-  speechSynth.reset();
-
-  byte readyWord[] = { RR1, EH, EH, PA1, DD2, IY, PA4 };
-  speechSynth.speakList(readyWord, 7);
 }
 
-void assignListToNote(byte notenum, byte *list, byte count) {
 
-  byte *newList = malloc(count);
-  memcpy(newList, list, count);
-  
-  noteAssignments[notenum].list = newList;
-  noteAssignments[notenum].count = count;
-}
-
-byte pitchCode;
 
 void loop()
 {
-  Wire.beginTransmission(B0010111); // i2c address is B0010111
-  Wire.write(pitchCode);              // sends one byte
-  Wire.endTransmission();    // stop transmitting
-
   MIDI.read();
 }
 
