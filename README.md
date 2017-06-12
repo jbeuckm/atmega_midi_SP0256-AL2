@@ -1,3 +1,5 @@
+Try this SYSEX Editor app: [https://midi-tts.herokuapp.com/editor/index.html](https://midi-tts.herokuapp.com/editor/index.html)
+
 Accepts MIDI signals to control a speech synthesizer IC. LTC6904 (on a DIP adapter) controls the clock frequency of the SP chip.
 
 ## MIDI Sysex Messages
